@@ -1,44 +1,97 @@
-# ega_assignment_5 This is the modified prompt which scored 100% from the prompt_of_prompts.md file 
-You are a math and drawing agent solving problems in iterations. You have access to various mathematical and painting tools.
+# ASCII Exponential Calculator with Paint Visualization
 
-TASK:
-1. Calculate the ASCII values of characters in a given string
-2. Calculate the sum of exponentials of those ASCII values
-3. Open paint app, draw a rectangle, and print the result inside
+## Overview
 
-REASONING INSTRUCTIONS:
-- Reason step-by-step through each calculation
-- Tag your reasoning type (e.g., [ASCII CONVERSION], [EXPONENTIAL CALCULATION])
-- Verify each intermediate result before proceeding
-- If uncertain about any step, explain your uncertainty and attempt an alternative approach
+This project demonstrates an advanced use of Multi-modal Cognitive Programming (MCP) to perform mathematical operations and visualize results using macOS's Paintbrush application. The system uses Gemini AI to orchestrate tool calls, performing a chain of operations:
 
-CONVERSATION LOOP:
-- Each function call represents one iteration in our solution process
-- After each function call, analyze the result before proceeding
-- Update your approach based on previous results
+1. Convert text to ASCII values
+2. Calculate exponential sums of those values
+3. Visualize the result by drawing a rectangle in Paintbrush and adding text
 
-OUTPUT FORMAT:
-Use EXACTLY ONE line in these formats:
-1. For function calls with reasoning:
-   REASONING: [Step explanation and verification]
-   FUNCTION_CALL: function_name|param1|param2|...
-   
-2. For final answers:
-   REASONING: [Final verification and confirmation]
-   FINAL_ANSWER: [Success/Failure with explanation]
+## Project Structure
 
-ERROR HANDLING:
-- If a function fails, try an alternative approach
-- If calculations yield unexpected results, double-check your work
-- If paint operations fail, retry with simplified parameters
+The project consists of two main files:
 
-Examples:
-- REASONING: [ASCII CONVERSION] Converting "A" to ASCII gives 65. Verified against ASCII table.
-  FUNCTION_CALL: strings_to_chars_to_int|INDIA
+- `talk2mcp-2_modified.py` - Main orchestration script that handles LLM interactions and function call parsing
+- `mcp_tools.py` - Tool definitions for mathematical operations and UI automation
 
-- REASONING: [TOOL USAGE] Now that calculations are complete, opening paint to visualize result.
-  FUNCTION_CALL: open_paint
+## Prerequisites
 
-- REASONING: [VERIFICATION] All steps completed successfully. The sum was correctly displayed in the rectangle.
-  FINAL_ANSWER: [Success - All calculations correct and result displayed in paint]
+- Python 3.8+
+- macOS with Paintbrush application installed
+- Gemini API key
 
+## Required Packages
+
+```
+pip install python-dotenv mcp google-generativeai pyautogui rich
+```
+
+## Configuration
+
+Create a `.env` file in the project root with your Gemini API key:
+
+```
+GEMINI_API_KEY=your_key_here
+```
+
+## How It Works
+
+### Main Flow (talk2mcp-2_modified.py)
+
+The `talk2mcp-2_modified.py` script:
+
+1. Establishes an MCP server connection to `mcp_tools.py`
+2. Loads available tools through the MCP interface
+3. Creates a system prompt that instructs the LLM how to use the tools
+4. Presents a specific task to the LLM: "Find the ASCII values of characters in INDIA and then return sum of exponentials of those values. Open paint, draw a rectangle And print the result inside a rectangle in paint."
+5. Processes LLM responses in an iteration loop (up to 5 iterations):
+   - Parses JSON-formatted function calls using regex and JSON validation
+   - Executes the corresponding tools through the MCP interface
+   - Provides feedback to the LLM for the next iteration
+
+The script includes robust functions for validating and correcting JSON, handling improperly formatted responses from the LLM.
+
+### Available Tools (mcp_tools.py)
+
+The `mcp_tools.py` script defines all the tools that can be called by the LLM:
+
+#### ASCII and Exponential Operations
+- `strings_to_chars_to_int`: Converts text characters to ASCII values
+- `int_list_to_exponential_sum`: Calculates sum of exponentials of a list of integers
+
+#### Paint Operations
+- `open_paint`: Opens Paintbrush application
+- `draw_rectangle`: Draws a rectangle in the Paintbrush window
+- `add_text_in_paint`: Adds text inside the rectangle
+
+#### Mathematical Operations
+- Basic arithmetic: `add`, `subtract`, `multiply`, `divide`
+- Advanced math: `power`, `sqrt`, `log`, `factorial`
+- Trigonometric functions: `sin`, `cos`, `tan`
+
+## Example Usage
+
+Run the main script:
+
+```
+python talk2mcp-2_modified.py
+```
+
+This will orchestrate the following workflow:
+1. The LLM analyzes the task and calls `strings_to_chars_to_int` with "INDIA" as input
+2. It takes the resulting ASCII values and calls `int_list_to_exponential_sum` to calculate the sum
+3. It calls `open_paint` to launch the Paintbrush application
+4. It calls `draw_rectangle` to create a rectangle in the canvas
+5. It calls `add_text_in_paint` to display the result inside the rectangle
+
+## Troubleshooting
+
+- **JSON Parsing Errors**: The system includes robust error handling for malformed JSON from the LLM.
+- **UI Automation Issues**: The code uses both AppleScript and PyAutoGUI as fallbacks for UI interactions.
+
+## Extensions
+
+This framework can be extended with additional tools by:
+1. Adding new tool functions to `mcp_tools.py`
+2. Updating the system prompt in `talk2mcp-2_modified.py` to include descriptions of the new tools 
