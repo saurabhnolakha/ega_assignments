@@ -1,4 +1,4 @@
-# ASCII Exponential Calculator with Paint Visualization
+# EGA_Assignment-5ASCII Exponential Calculator with Paint Visualization
 
 ## Overview
 
