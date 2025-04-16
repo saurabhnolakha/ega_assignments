@@ -3,7 +3,7 @@
 
 ## Overview
 
-This project demonstrates an advanced use of Multi-modal Cognitive Programming (MCP) to perform mathematical operations and visualize results using macOS's Paintbrush application. The system uses Gemini AI to orchestrate tool calls, performing a chain of operations:
+This project demonstrates an advanced use of Model Context Protocol (MCP) to perform mathematical operations and visualize results using macOS's Paintbrush application. The system uses Gemini AI to orchestrate tool calls, performing a chain of operations:
 
 1. Convert text to ASCII values
 2. Calculate exponential sums of those values
